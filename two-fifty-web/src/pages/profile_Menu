@@ -1,0 +1,78 @@
+import { useState, useEffect } from 'react';
+
+export default function ProfilePage() {
+  const [profiles, setProfiles] = useState([]);
+
+  useEffect(() => {
+    async function fetchProfiles() {
+      const response = await fetch('/api/profile');
+      const data = await response.json();
+      setProfiles(data);
+    }
+
+    fetchProfiles();
+  }, []);
+
+  const handleCreate = async () => {
+    const response = await fetch('/api/profile', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: 'New User',
+        email: 'newuser@example.com',
+        bio: 'I am a new user',
+      }),
+    });
+    const data = await response.json();
+    setProfiles([...profiles, data]);
+  };
+
+  const handleUpdate = async (id, updatedProfile) => {
+    const response = await fetch('/api/profile', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        id,
+        updatedProfile,
+      }),
+    });
+    const data = await response.json();
+    const index = profiles.findIndex((p) => p.id === id);
+    setProfiles([...profiles.slice(0, index), data, ...profiles.slice(index + 1)]);
+  };
+
+  const handleDelete = async (id) => {
+    const response = await fetch('/api/profile', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        id,
+      }),
+    });
+    const message = await response.json();
+    setProfiles(profiles.filter((p) => p.id !== id));
+  };
+
+  return (
+    <div>
+      <button onClick={handleCreate}>Create Profile</button>
+      <ul>
+        {profiles.map((profile) => (
+          <li key={profile.id}>
+            <h2>{profile.name}</h2>
+            <p>{profile.email}</p>
+            <p>{profile.bio}</p>
+            <button onClick={() => handleUpdate(profile.id, { name: 'Updated Name' })}>Update Profile</button>
+            <button onClick={() => handleDelete(profile.id)}>Delete Profile</button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
