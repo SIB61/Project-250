@@ -1,6 +1,5 @@
 import { compare } from "@/lib/hashing";
 import { createJwt } from "@/lib/jwt";
-import dbConnect from "@/lib/mongo-connect";
 import handleRequest from "@/lib/req-handler";
 import User from "@/schemas/user.schema";
 export default async function handler(req, res) {
