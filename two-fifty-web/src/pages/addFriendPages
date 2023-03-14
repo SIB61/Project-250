@@ -1,0 +1,30 @@
+import { useState, useEffect } from 'react';
+
+export default function FriendList() {
+  const [friends, setFriends] = useState([]);
+
+  useEffect(() => {
+    async function fetchFriends() {
+      const response = await fetch('/api/friends');
+      const data = await response.json();
+      setFriends(data);
+    }
+
+    fetchFriends();
+  }, []);
+
+  return (
+    <div>
+      <h2>My Friends</h2>
+      <ul>
+        {friends.map((friend) => (
+          <li key={friend.id}>
+            <h3>{friend.name}</h3>
+            <p>Age: {friend.age}</p>
+            <p>Email: {friend.email}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
