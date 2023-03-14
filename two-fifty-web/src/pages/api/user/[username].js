@@ -6,8 +6,7 @@ export default async function handler(req,res){
     res,
     async get(){
        const {username} = req.query
-       console.log(username)
-       const user =await User.findOne({userName:username})
+       const user = await User.findOne({userName:username})
        if(user)
        res.json({user})
        else

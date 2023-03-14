@@ -14,7 +14,8 @@ export default async function handler(req, res) {
         res.status(400).send();
       }
       const accessToken = createJwt({ id: user._id, userName: user.userName });
-      res.json({ ...user, accessToken });
+
+      res.json({ name:user.name,userName:user.userName, email:user.email, accessToken, id:user._id });
     },
   });
 }

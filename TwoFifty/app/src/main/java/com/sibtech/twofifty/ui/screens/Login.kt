@@ -1,18 +1,40 @@
 package com.sibtech.twofifty.ui.screens
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.sibtech.twofifty.data.apiService
+import com.sibtech.twofifty.lib.getSharedPrep
+import com.sibtech.twofifty.lib.storeAuthRes
+import com.sibtech.twofifty.models.LoginRequest
+import com.sibtech.twofifty.ui.components.LoadingModal
+import com.sibtech.twofifty.viewmodels.LoginViewModel
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
+@SuppressLint("SuspiciousIndentation")
+@OptIn(DelicateCoroutinesApi::class)
 @Composable
 fun LoginScreen(navHostController: NavHostController) {
+    val context = LocalContext.current
+    val sharedPref = getSharedPrep(context)
+    val vm = viewModel<LoginViewModel>()
+
+   if(vm.isLoading.value){
+       LoadingModal()
+   }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -28,16 +50,16 @@ fun LoginScreen(navHostController: NavHostController) {
         )
 
         OutlinedTextField(
-            value = "",
-            onValueChange = { /* TODO */ },
+            value = vm.email.value,
+            onValueChange = { vm.email.value = it },
             label = { Text("Email") },
             modifier = Modifier
                 .padding(vertical = 8.dp)
                 .fillMaxWidth()
         )
         OutlinedTextField(
-            value = "",
-            onValueChange = { /* TODO */ },
+            value = vm.password.value,
+            onValueChange = { vm.password.value = it },
             label = { Text("Password") },
             visualTransformation = PasswordVisualTransformation(),
             modifier = Modifier
@@ -67,8 +89,7 @@ fun LoginScreen(navHostController: NavHostController) {
 
         Button(
             onClick = { /* TODO */
-                navHostController.popBackStack()
-                navHostController.navigate("Home")
+                vm.login(context,navHostController)
             },
 
             modifier = Modifier

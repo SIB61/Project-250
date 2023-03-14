@@ -1,17 +1,18 @@
 import mongoose, { mongo } from "mongoose"
 const messageSchema =new mongoose.Schema({
     senderId:{
-       type:ObjectId,
+       type:String,
        required:true
     },
     receiverId:{
-        type:ObjectId,
+        type:String,
         required:true
     },
     encryptedMsg:{
         type:String,
         required:true
     },
+    type:String,
     time:{
         type:Date,
         default:Date.now

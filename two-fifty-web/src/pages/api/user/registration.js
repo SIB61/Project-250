@@ -25,7 +25,7 @@ export default async function handler(req, res) {
       try {
         const savedUser = await user.save();
         const accessToken = createJwt({ id: savedUser._id, userName });
-        res.json({ id: savedUser._id, accessToken, ...savedUser._doc });
+        res.json({ name:savedUser.name,userName:savedUser.userName, email:savedUser.email, accessToken, id:savedUser._id });
       } catch (err) {
         res.status(500).send();
       }

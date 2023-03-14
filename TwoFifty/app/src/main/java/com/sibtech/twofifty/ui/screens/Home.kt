@@ -27,8 +27,7 @@ fun Home(navController: NavHostController) {
                 containerColor = MaterialTheme.colorScheme.secondaryContainer
             ),
             actions = {
-
-                IconButton(onClick = { /*TODO*/ }) {
+                IconButton(onClick = { navController.navigate("search") }) {
                     Icon(imageVector = Icons.Default.Search, contentDescription = null)
                 }
                 IconButton(onClick = { /*TODO*/ }) {
@@ -39,7 +38,7 @@ fun Home(navController: NavHostController) {
     },
 
         floatingActionButton = {
-            ExtendedFloatingActionButton(onClick = { /*TODO*/ }) {
+            ExtendedFloatingActionButton(onClick = { navController.navigate("search") }) {
                 Icon(imageVector = Icons.Default.Add, contentDescription = null)
                 Text(text = "New Connection")
             }

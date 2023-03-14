@@ -14,6 +14,9 @@ function handler(req,res){
         receiverId:{$in:[id,secondUserId]}
       })
       res.json(messages)
+    },
+    async post(){
+
     }
   }) 
 }

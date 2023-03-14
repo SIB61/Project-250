@@ -7,9 +7,13 @@ import { useState } from "react";
 export default function login() {
   const [formState, setFormState] = useState({});
   async function onSubmit(){
-    const user = await axios.post("/api/user/login",formState)
-    console.log(user)
+    const user = await fetch({
+      url:"/api/user/login",
+      method:'POST'
+    })
   }
+
+
   return (
     <div className="w-screen h-screen flex justify-center items-center">
       <form className="p-4 glass rounded-xl flex gap-4 flex-col justify-center items-center w-max m-auto">
@@ -29,9 +33,7 @@ export default function login() {
         />
         <button
           className="btn w-full"
-          onClick={() => {
-            onSubmit()
-          }}
+          onClick={onSubmit}
         >
           Button
         </button>
