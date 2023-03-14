@@ -9,6 +9,7 @@ export default function Home() {
   const [receiverid,setReceiverId] = useState([])
   const socket = useMemo(() => getSocket(), []);
   useEffect(() => {
+    fetch('/api/message')
     socket.on("connect", () => {
       console.log("connected", socket.id);
     });
@@ -46,7 +47,7 @@ export default function Home() {
           />
           <button
             onClick={() => {
-              socket.emit("sendMessage", message);
+              socket.emit("sendMessage", message, receiverid);
               setMessages(state=>[...state,message]) 
             }}
           >

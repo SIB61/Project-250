@@ -4,9 +4,9 @@ export default function handler(req, res) {
   if (!io) {
     const io = new Server(res.socket.server);
     io.on("connection", (socket) => {
-      socket.on("sendMessage", (msg) => {
+      socket.on("sendMessage", (msg,receiverId) => {
         console.log("message: " + msg);
-        socket.broadcast.emit("newMessage",msg)
+        socket.to(receiverId).emit("newMessage",msg)
       });
       socket.on("disconnect", () => {});
     });
