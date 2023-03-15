@@ -8,7 +8,7 @@ async function handler(req, res) {
 
   const { id } = req.user;
 
-  console.log(withUserId, id)
+  console.log(withUserId, id);
 
   const connection = await Connection.findOne({
     userOne: { $in: [id, withUserId] },
@@ -16,34 +16,40 @@ async function handler(req, res) {
   });
 
   if (!connection) {
-    console.log("dskl")
+    console.log("dskl");
     res.status(404).send("connection not found.");
     return;
   }
 
   createSocketConnection(res);
 
-  res.json({status:"connected"});
+  res.json({ status: "connected" });
 }
 
 function createSocketConnection(res) {
   let io = res.socket.server.io;
-  console.log("creating")
-  console.log(io)
+  console.log("creating");
+  console.log(io);
   if (!io) {
-    console.log("not io")
+    console.log("not io");
     const io = new Server(res.socket.server);
     io.on("connection", (socket) => {
-      console.log("connected")
-      socket.on("sendMessage", async (msg) => {
-        console.log("message: " + msg);
-        socket.broadcast.emit("newMessage", msg);
-        const message = new Message(msg);
+
+      const customId = socket.handshake.query.custom_id;
+      console.log(`New connection with custom id ${customId}`);
+      socket.customId = customId;
+
+      socket.on("sendMessage", async (senderId,receiverId,encryptedMsg,forUser) => {
+        console.log("message: " + encryptedMsg);
+        socket.emit("newMessage", senderId,receiverId,encryptedMsg,forUser);
+        const message = new Message({senderId:senderId,receiverId:receiverId,forUser:forUser,encryptedMsg:encryptedMsg});
         await message.save();
       });
+
       socket.on("disconnect", () => {
         res.socket.server.io = undefined;
       });
+
     });
     res.socket.server.io = io;
   }

@@ -18,7 +18,7 @@ import retrofit2.http.Query
 import java.util.Objects
 
 val retrofit = Retrofit.Builder()
-    .baseUrl("http://192.168.0.139:3000/api/")
+    .baseUrl("http://192.168.0.111:3000/api/")
     .addConverterFactory(GsonConverterFactory.create())
     .addCallAdapterFactory(CoroutineCallAdapterFactory())
     .build()
@@ -33,7 +33,7 @@ interface MyApi {
     suspend fun registration(@Body request: RegistrationRequest): Response<AuthResponse>
 
     @GET("connection")
-    suspend fun getMyConnections(@Header("authorization") header: String): Response<List<ConnectionResponse>>
+    suspend fun getMyConnections(@Header("authorization") header: String): Response<List<UserModel>>
 
     @GET("connection/requests")
     suspend fun getMyRequests(@Header("authorization") header: String): Response<List<RequestsResponseModel>>
@@ -44,7 +44,10 @@ interface MyApi {
 
     @GET("message")
     suspend fun connectMessage(@Header("authorization") header: String, @Query("withUserId") id:String): Response<ConnectionResponse>
+
+    @POST("connection")
+    suspend fun updateConnectionStatus(@Header("authorization") header: String, @Query("withUserId") id:String, @Body status:ConnectionStatus): Response<ConnectionStatus>
 }
 
-data class connectionResponse(val status:String="")
+data class ConnectionStatus(val status:String="")
 val apiService = retrofit.create(MyApi::class.java)

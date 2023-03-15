@@ -11,7 +11,7 @@ async function getRequests(req, res) {
       status: "pending",
     });
     const requestIds = requests.map((r) => r.userOne);
-    const requestUsers = User.find({
+    const requestUsers = await User.find({
       _id: { $in: requestIds },
     });
     res.json(

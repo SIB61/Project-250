@@ -34,8 +34,11 @@ fun Profile(navHostController: NavHostController, parentNavigate:(route:String)-
         Text(text = sharedPreferences.getString("name","")!!, fontSize = 30.sp)
         Text(text = sharedPreferences.getString("email","")!!, fontSize = 24.sp)
         Text(text = "@"+sharedPreferences.getString("userName","")!!, fontSize = 20.sp )
-        Button(onClick = { /*TODO*/ }) {
-            Text(text = "edit")
+        Button(onClick = {
+            sharedPreferences.edit().clear().apply()
+            parentNavigate("login")
+        }) {
+            Text(text = "logout")
         }
     }
 }

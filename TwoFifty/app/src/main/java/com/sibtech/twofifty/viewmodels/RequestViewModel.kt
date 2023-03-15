@@ -21,7 +21,7 @@ class RequestViewModel:ViewModel() {
         isLoading = true
         sharedPreferences = getSharedPrep(context)
         viewModelScope.launch {
-            val requestsResponse = apiService.getMyRequests("Bearer "+sharedPreferences.getString("accessToken",""))
+            val requestsResponse = apiService.getMyRequests("Bearer "+sharedPreferences.getString("accessToken","")!!)
             if(requestsResponse.isSuccessful){
                 isLoading = false
                 requests.value = requestsResponse.body()!!

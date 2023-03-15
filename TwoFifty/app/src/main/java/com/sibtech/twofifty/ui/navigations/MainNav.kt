@@ -30,9 +30,7 @@ fun MainNav(navController: NavHostController) {
         }
         composable(route = "chat/{username}/{name}/{id}") {
             val username = it.arguments?.getString("username")!!
-
             val id = it.arguments?.getString("id")!!
-
             val name = it.arguments?.getString("name")!!
             ChatScreen(navHostController = navController, username = username, name = name, id = id)
         }

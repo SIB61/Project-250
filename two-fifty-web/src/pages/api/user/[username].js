@@ -12,13 +12,16 @@ async function handler(req, res) {
       const { id } = req.user;
       const user = await User.findOne({ userName: username });
       if (user) {
-        let connection = Connection.find({
+        let connection = await Connection.findOne({
           userOne: { $in: [user._id, id] },
           userTwo: { $in: [user._id, id] },
         });
-        if(!connection) connection = {status:'disconected'}
+        if(!connection) connection = {status:'disconnected'}
         else if(connection.userTwo == id) connection.status = 'requested'
-        res.json({id:user._id, name:user.name, email:user.email, userName: user.userName, connectionStatus:"disconnected"});
+        console.log(connection.status)
+        console.log(connection)
+
+        res.json({id:user._id, name:user.name, email:user.email, userName: user.userName, connectionStatus:connection.status});
       } else res.status(404).send("user not found");
     },
   });

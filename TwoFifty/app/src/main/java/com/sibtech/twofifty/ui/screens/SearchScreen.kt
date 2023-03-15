@@ -12,6 +12,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.focusTarget
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -74,9 +75,14 @@ fun SearchScreen(navHostController: NavHostController) {
                Text(text = vm.user.value.name, fontSize = 30.sp)
                Text(text = vm.user.value.email, fontSize = 24.sp)
                Text(text = "@"+vm.user.value.userName, fontSize = 20.sp )
-               Button(onClick = { /*TODO*/ }) {
+
+               if(vm.getActionText().isNotEmpty())
+                   Button(onClick = {
+                   vm.updateConnection(context)
+               }) {
                    Text(text = vm.getActionText())
                }
+               else Text("requested",Modifier.alpha(0.7f))
            }
        }
     }

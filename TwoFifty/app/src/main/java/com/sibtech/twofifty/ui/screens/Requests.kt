@@ -8,6 +8,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -31,19 +32,24 @@ fun Requests(navHostController: NavHostController, parentNavigate:(route:String)
          Row(modifier = Modifier
             .fillMaxWidth()
             .clickable { }
-            .padding(10.dp)) {
+            .padding(10.dp),
+         ) {
             ProfileAvatar(
                imageUrl = chatMessages[2].senderImageUrl,
                modifier = Modifier.size(50.dp)
             )
-            Column(modifier = Modifier
-               .fillMaxSize()
-               .padding(6.dp), verticalArrangement = Arrangement.Center) {
-               Text(text = user.name, fontSize = 24.sp)
-               Text(text = "@"+ user.userName, fontSize = 20.sp, fontFamily = FontFamily.Monospace , fontWeight = FontWeight.Light)
-            }
-            Button(onClick = { /*TODO*/ }) {
-               Text(text = "accept")
+            Row(
+               Modifier.fillMaxSize(),
+               horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+               Column(modifier = Modifier
+                  .padding(6.dp), verticalArrangement = Arrangement.Center) {
+                  Text(text = user.name, fontSize = 24.sp)
+                  Text(text = "@"+ user.userName, fontSize = 20.sp, fontFamily = FontFamily.Monospace , fontWeight = FontWeight.Light)
+               }
+               Button(onClick = { /*TODO*/ }) {
+                  Text(text = "accept")
+               }
             }
          }
       }

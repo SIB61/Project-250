@@ -26,6 +26,7 @@ async function handler(req, res) {
       const { id } = req.user;
       const { withUserId } = req.query;
       const { status } = req.body;
+      console.log("get reques to update status")
       let connection = await Connection.findOne({
         userOne: { $in: [id, withUserId] },
         userTwo: { $in: [id, withUserId] },
@@ -40,7 +41,7 @@ async function handler(req, res) {
         });
         await connection.save();
       }
-      res.json(connection.status);
+      res.json({status:connection.status});
     },
   });
 }
@@ -54,7 +55,7 @@ async function getUserConnections(id) {
   const connectedUsers = await User.find({
     _id: {$in:connectedUserIds},
   });
-  return connectedUsers.map(con=>({id:con._id,email:con.email,userName:con.userName,name:con.name}));
+  return connectedUsers.map(con=>({id:con._id,email:con.email,userName:con.userName,name:con.name,publicKey:con.publicKey}));
 }
 
 function getSecondUserId(connection, id) {

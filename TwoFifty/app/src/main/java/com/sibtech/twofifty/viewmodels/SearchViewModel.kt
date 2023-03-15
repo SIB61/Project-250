@@ -3,15 +3,17 @@ import android.content.Context
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sibtech.twofifty.data.ConnectionStatus
 import com.sibtech.twofifty.data.apiService
 import com.sibtech.twofifty.lib.getSharedPrep
 import com.sibtech.twofifty.lib.storeAuthRes
+import com.sibtech.twofifty.models.ConnectionResponse
 import com.sibtech.twofifty.models.LoginRequest
 import com.sibtech.twofifty.models.UserModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class SearchResponse(val connectionStatus:String=""):UserModel()
+class SearchResponse(var connectionStatus:String=""):UserModel()
 
 class SearchViewModel:ViewModel() {
     val user = mutableStateOf<SearchResponse>(SearchResponse())
@@ -33,11 +35,31 @@ class SearchViewModel:ViewModel() {
 
     fun getActionText():String{
        when(user.value.connectionStatus){
-          "connected"->return "chat"
+           "connected"->return "chat"
            "disconnected"->return "request"
-           "requested"->return "abort"
-           "pending"->return "request"
-           else -> return "request"
+           "requested"->return "accept"
+           else -> return ""
+       }
+    }
+
+
+    fun getRequestStatus():String{
+        when(user.value.connectionStatus){
+            "disconnected"->return "pending"
+            "requested","pending"->return "connected"
+            else -> return "disconnected"
+        }
+    }
+
+    fun updateConnection(ctx:Context){
+        isLoading.value = true
+       viewModelScope.launch {
+           val token = getSharedPrep(ctx).getString("accessToken","")!!
+           val statusRes = apiService.updateConnectionStatus("Bearer "+token, id = user.value.id, status = ConnectionStatus(status = getRequestStatus()))
+           if(statusRes.isSuccessful){
+               isLoading.value = false
+               user.value.connectionStatus = statusRes.body()?.status ?: user.value.connectionStatus
+           }
        }
     }
 }

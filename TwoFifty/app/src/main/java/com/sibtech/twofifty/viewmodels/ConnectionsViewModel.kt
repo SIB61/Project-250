@@ -9,10 +9,11 @@ import androidx.lifecycle.viewModelScope
 import com.sibtech.twofifty.data.apiService
 import com.sibtech.twofifty.lib.getSharedPrep
 import com.sibtech.twofifty.models.ConnectionResponse
+import com.sibtech.twofifty.models.UserModel
 import kotlinx.coroutines.launch
 
 class ConnectionsViewModel : ViewModel(){
-    var connections = mutableStateOf(listOf<ConnectionResponse>())
+    var connections = mutableStateOf(listOf<UserModel>())
     lateinit var sharedPreferences: SharedPreferences
     var isLoading = false
 
