@@ -20,6 +20,7 @@ import com.sibtech.twofifty.ui.navigations.HomeNav
 @Composable
 fun Home(navController: NavHostController) {
     val homeNavController = rememberNavController()
+
     Scaffold(topBar = {
         SmallTopAppBar(
             title = { Text(text = "Secure Chat") },
@@ -48,7 +49,9 @@ fun Home(navController: NavHostController) {
     {
         Box(modifier = Modifier.padding(it)) {
 
-            HomeNav(navHostController = homeNavController)
+            HomeNav(navHostController = homeNavController, parentNavigate = {route->
+                navController.navigate(route)
+            })
             
         }
     }

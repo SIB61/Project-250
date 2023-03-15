@@ -11,5 +11,5 @@ const connectionSchema =new mongoose.Schema({
     status:String
 })
 
-const Connection = mongoose.models.Connection || mongoose.model("Message",connectionSchema)
+const Connection = mongoose.models.Connection || mongoose.model("Connection",connectionSchema)
 export default Connection

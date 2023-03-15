@@ -1,5 +1,10 @@
 package com.sibtech.twofifty.models
 
+import android.net.wifi.WifiManager.SuggestionConnectionStatusListener
+import java.sql.Time
+import java.sql.Timestamp
+import java.util.Date
+
 data class ChatMessage(
     val sender: String,
     val message: String,
@@ -14,6 +19,20 @@ data class User(
     val userId:String="",
     val profileImageUrl: String = "",
     val publicKey: String = ""
+)
+open class UserModel(
+    val id:String="",
+    val name: String="",
+    val email: String="",
+    val userName:String="",
+    val publicKey: String="",
+)
+
+open class ChatModel(
+    val senderId:String="",
+    val receiverId: String="",
+    val encryptedMsg:String="",
+    val forUser:String="",
 )
 
 data class LoginRequest(
@@ -36,3 +55,4 @@ data class Message(
     val senderId:String,
     val receiverId:String,
 )
+

@@ -1,7 +1,7 @@
 import handleRequest from "@/lib/req-handler";
 import withAuth from "@/middleware/auth.middleware";
-const { default: Connection } = require("@/schemas/connection.schema");
-const { default: User } = require("@/schemas/user.schema");
+import Connection from "@/schemas/connection.schema";
+import User from "@/schemas/user.schema";
 export default withAuth(handler);
 async function handler(req, res) {
   handleRequest({
@@ -19,18 +19,19 @@ async function handler(req, res) {
         userOne:{$in:[withUserId,id]},
         userTwo:{$in:[withUserId,id]}
       })
+      res.json({status:connection.status,requestedBy:connection.userOne})
     },
 
     async post() {
       const { id } = req.user;
       const { withUserId } = req.query;
       const { status } = req.body;
-      const connection = await Connection.findOne({
+      let connection = await Connection.findOne({
         userOne: { $in: [id, withUserId] },
         userTwo: { $in: [id, withUserId] },
       });
       if (connection) {
-        connection.updateOne({ status: status });
+       await connection.updateOne({ status: status });
       } else {
         connection = new Connection({
           userOne: id,
@@ -39,11 +40,9 @@ async function handler(req, res) {
         });
         await connection.save();
       }
-      res.json(connection);
+      res.json(connection.status);
     },
   });
-
-  res.json({ connectedUsers });
 }
 
 async function getUserConnections(id) {
@@ -53,9 +52,9 @@ async function getUserConnections(id) {
   });
   const connectedUserIds = connections.map((conn) => getSecondUserId(conn, id));
   const connectedUsers = await User.find({
-    _id: connectedUserIds,
+    _id: {$in:connectedUserIds},
   });
-  return connectedUsers;
+  return connectedUsers.map(con=>({id:con._id,email:con.email,userName:con.userName,name:con.name}));
 }
 
 function getSecondUserId(connection, id) {

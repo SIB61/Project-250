@@ -8,29 +8,36 @@ async function handler(req, res) {
 
   const { id } = req.user;
 
+  console.log(withUserId, id)
+
   const connection = await Connection.findOne({
     userOne: { $in: [id, withUserId] },
     userTwo: { $in: [id, withUserId] },
   });
 
   if (!connection) {
+    console.log("dskl")
     res.status(404).send("connection not found.");
     return;
   }
 
   createSocketConnection(res);
 
-  res.end();
+  res.json({status:"connected"});
 }
 
 function createSocketConnection(res) {
   let io = res.socket.server.io;
+  console.log("creating")
+  console.log(io)
   if (!io) {
+    console.log("not io")
     const io = new Server(res.socket.server);
     io.on("connection", (socket) => {
-      socket.on("sendMessage", async (msg, receiverId) => {
+      console.log("connected")
+      socket.on("sendMessage", async (msg) => {
         console.log("message: " + msg);
-        socket.to(receiverId).emit("newMessage", msg);
+        socket.broadcast.emit("newMessage", msg);
         const message = new Message(msg);
         await message.save();
       });

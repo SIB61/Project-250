@@ -12,11 +12,7 @@ const messageSchema =new mongoose.Schema({
         type:String,
         required:true
     },
-    type:String,
-    time:{
-        type:Date,
-        default:Date.now
-    }
+    forUser:String,
 })
 
 const Message = mongoose.models.Message || mongoose.model("Message",messageSchema)

@@ -21,15 +21,18 @@ import androidx.navigation.NavOptions
 fun BottomNavBar(navHostController: NavHostController) {
 
     val backPressDispatcher = LocalOnBackPressedDispatcherOwner.current
+
     NavigationBar {
         NavigationBarItem(
-            selected = navHostController.currentDestination?.route == "chats",
+            selected = navHostController.currentDestination?.route == "connections",
             onClick = {
-                if(navHostController.currentDestination?.route!="chats"){
+                if(navHostController.currentDestination?.route!="connections"){
                     backPressDispatcher?.onBackPressedDispatcher?.onBackPressed()
+//                    navHostController.navigate("connections")
                 }
+
             },
-            label = { Text(text = "Chats") },
+            label = { Text(text = "Connections") },
             icon = {
                 Icon(
                     painter = painterResource(id = com.sibtech.twofifty.R.drawable.ic_chat),
@@ -39,16 +42,18 @@ fun BottomNavBar(navHostController: NavHostController) {
 
         NavigationBarItem(
 
-            selected = navHostController.currentDestination?.route == "connections",
+            selected = navHostController.currentDestination?.route == "requests",
             onClick = {
-                if(navHostController.currentDestination?.route!="connections")
+                if(navHostController.currentDestination?.route!="requests")
                 {
-                    navHostController.navigate("connections"){
-                        this.popUpTo("chats")
+                    navHostController.navigate("requests")
+                    {
+                        popUpTo("connections")
                     }
+
                 }
             },
-            label = { Text(text = "Connections") },
+            label = { Text(text = "Requests") },
             icon = {
                 Icon(
                     painter = painterResource(id = com.sibtech.twofifty.R.drawable.ic_people),
@@ -60,8 +65,9 @@ fun BottomNavBar(navHostController: NavHostController) {
             selected = navHostController.currentDestination?.route == "profile",
             onClick = {
                 if(navHostController.currentDestination?.route != "profile"){
-                    navHostController.navigate("profile"){
-                        this.popUpTo("chats")
+                    navHostController.navigate("profile")
+                    {
+                        popUpTo("connections")
                     }
                 }
             },

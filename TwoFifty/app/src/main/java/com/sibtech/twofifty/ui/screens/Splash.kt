@@ -31,9 +31,9 @@ fun SplashScreen(navController: NavHostController) {
 
     if (animationState.isAtEnd && animationState.isPlaying) {
         navController.popBackStack()
-//        if (!isAuthenticated)
+        if (!isAuthenticated)
             navController.navigate("login")
-//        else
-//            navController.navigate("Home")
+        else
+            navController.navigate("Home")
     }
 }
